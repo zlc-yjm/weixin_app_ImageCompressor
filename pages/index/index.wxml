@@ -1,0 +1,57 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 上传区域 -->
+  <view class="upload-section {{isDragging ? 'dragging' : ''}}">
+    <view class="upload-box" bindtap="chooseImage">
+      <image class="upload-icon" src="/images/upload.png" mode="aspectFit"></image>
+      <text class="upload-text">点击或拖拽图片至此处</text>
+      <text class="upload-hint">支持 PNG、JPG 格式，最多4张</text>
+      <text class="upload-count" wx:if="{{imageList.length > 0}}">{{imageList.length}}/4</text>
+    </view>
+  </view>
+
+  <!-- 压缩设置 -->
+  <view class="compress-settings" wx:if="{{imageList.length > 0}}">
+    <view class="quality-slider">
+      <view class="slider-info">
+        <view class="slider-title">压缩设置</view>
+        <view class="slider-value">压缩质量：{{quality}}%</view>
+      </view>
+      <slider min="1" max="100" value="{{quality}}" block-size="28" 
+              activeColor="#007AFF" backgroundColor="#E9E9E9"
+              bindchanging="onQualityChange" bindchange="onQualityChange"/>
+    </view>
+  </view>
+
+  <!-- 图片列表 -->
+  <view class="image-list" wx:if="{{imageList.length > 0}}">
+    <view class="batch-download">
+      <view class="button-group">
+        <button class="batch-download-btn" bindtap="downloadAllImages">
+          批量下载全部图片
+        </button>
+        <button class="back-btn" bindtap="goBack">
+          返回
+        </button>
+      </view>
+    </view>
+    <view class="grid-container">
+      <view class="image-item" wx:for="{{imageList}}" wx:key="originalPath">
+        <view class="image-card">
+          <!-- 图片预览 -->
+          <view class="image-preview">
+            <image class="preview-img" src="{{item.originalPath}}" mode="aspectFill"></image>
+            <view class="image-info">
+              <text>原始大小：{{item.originalSize}}</text>
+              <text>压缩后：{{item.status === 'done' ? item.compressedSize : '处理中...'}}</text>
+              <text wx:if="{{item.status === 'done'}}">压缩率：{{item.compressionRatio}}%</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 处理中提示 -->
+  <loading-component wx:if="{{isProcessing}}" text="正在处理图片..."/>
+</view>

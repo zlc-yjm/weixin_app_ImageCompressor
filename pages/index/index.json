@@ -1,0 +1,6 @@
+{
+    "usingComponents": {
+        "loading-component": "/components/loading/loading"
+    },
+    "navigationBarTitleText": "图片压缩工具"
+}
